@@ -26,7 +26,7 @@ namespace SchoolSOA.Services.Identity.Controllers
         public async Task<IActionResult> Login([FromBody] LoginViewModel model)
         {
             if (!ModelState.IsValid)
-                return BadRequest(model);
+                return BadRequest(ModelState);
 
             var loginResult = await signInManager.PasswordSignInAsync(model.UserName, model.Password, false, false);
             if (!loginResult.Succeeded)
@@ -39,7 +39,7 @@ namespace SchoolSOA.Services.Identity.Controllers
         public async Task<IActionResult> Register([FromBody] RegisterViewModel model)
         {
             if (!ModelState.IsValid)
-                return BadRequest(model);
+                return BadRequest(ModelState);
 
             var identityResult = await userManager.CreateAsync(new IdentityUser
             {
