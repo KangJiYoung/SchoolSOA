@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
+using SchoolSOA.Services.Identity.Entities;
 using SchoolSOA.Services.Identity.ViewModels.Home;
 
 namespace SchoolSOA.Services.Identity.Controllers
@@ -23,7 +24,9 @@ namespace SchoolSOA.Services.Identity.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Login([FromBody] LoginViewModel model)
+        public async Task<IActionResult> Login(
+            [FromBody] LoginViewModel model,
+            [FromServices] AuthDbContext dbContext)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
@@ -32,7 +35,9 @@ namespace SchoolSOA.Services.Identity.Controllers
             if (!loginResult.Succeeded)
                 return BadRequest("Invalid username or password");
 
-            return Json(new { token = GetToken(model.UserName) });
+            var userId = dbContext.Users.First(it => it.UserName == model.UserName).Id;
+
+            return Json(new { token = GetToken(userId) });
         }
 
         [HttpPost]
@@ -52,13 +57,13 @@ namespace SchoolSOA.Services.Identity.Controllers
             return Json(new { token = GetToken(model.UserName) });
         }
 
-        private string GetToken(string username)
+        private string GetToken(string userId)
         {
             var now = DateTime.UtcNow;
 
             var claims = new Claim[]
             {
-                new Claim(JwtRegisteredClaimNames.Sub, username),
+                new Claim(ClaimTypes.NameIdentifier, userId),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
                 new Claim(JwtRegisteredClaimNames.Iat, now.ToUniversalTime().ToString(), ClaimValueTypes.Integer64)
             };
@@ -74,7 +79,7 @@ namespace SchoolSOA.Services.Identity.Controllers
                 ValidAudience = "Audience",
                 ValidateLifetime = true,
                 ClockSkew = TimeSpan.Zero,
-                RequireExpirationTime = true
+                RequireExpirationTime = false
             };
 
             var jwt = new JwtSecurityToken(
