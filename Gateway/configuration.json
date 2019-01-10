@@ -1,7 +1,7 @@
 {
     "ReRoutes": [
         {
-            "DownstreamPathTemplate": "/Home/Index",
+            "DownstreamPathTemplate": "/Blog/GetAll?skip={skip}&take={take}",
             "DownstreamScheme": "http",
             "DownstreamHostAndPorts": [
                 {
@@ -9,12 +9,8 @@
                     "Port": 80
                 }
             ],
-            "UpstreamPathTemplate": "/blog/getBlogs",
-            "UpstreamHttpMethod": [ "Get" ],  
-            "AuthenticationOptions": {  
-                "AuthenticationProviderKey": "TestKey",  
-                "AllowedScopes": []  
-            }
+            "UpstreamPathTemplate": "/blogs?skip={skip}&take={take}",
+            "UpstreamHttpMethod": [ "Get" ]
         },
         
         {
