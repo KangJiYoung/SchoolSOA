@@ -1,0 +1,16 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>School SOA Blog</ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding>
+  <ion-card *ngFor="let blog of blogs" (click)="onBlogClick(blog)">
+    <ion-card-header>
+      {{ blog.title }}
+    </ion-card-header>
+    <ion-card-content>
+      {{ blog.content }}
+    </ion-card-content>
+  </ion-card>
+</ion-content>

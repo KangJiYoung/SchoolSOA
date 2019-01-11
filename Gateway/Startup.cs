@@ -40,6 +40,7 @@ namespace Gateway
                 RequireExpirationTime = false,
             };
 
+            services.AddCors();
             services.AddAuthentication()
                     .AddJwtBearer("TestKey", x =>
                      {
@@ -52,6 +53,7 @@ namespace Gateway
 
         public async void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
+            app.UseCors(it => it.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin());
             app.UseAuthentication();
             await app.UseOcelot();
         }

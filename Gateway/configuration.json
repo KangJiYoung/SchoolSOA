@@ -12,6 +12,18 @@
             "UpstreamPathTemplate": "/blogs?skip={skip}&take={take}",
             "UpstreamHttpMethod": [ "Get" ]
         },
+        {
+            "DownstreamPathTemplate": "/Post/GetAll?blogId={blogId}",
+            "DownstreamScheme": "http",
+            "DownstreamHostAndPorts": [
+                {
+                    "Host": "blog",
+                    "Port": 80
+                }
+            ],
+            "UpstreamPathTemplate": "/blogPosts?blogId={blogId}",
+            "UpstreamHttpMethod": [ "Get" ]
+        },
         
         {
             "DownstreamPathTemplate": "/Home/Login",
