@@ -4,9 +4,12 @@ using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using Newtonsoft.Json;
 using SchoolSOA.Services.Identity.Entities;
 using SchoolSOA.Services.Identity.ViewModels.Home;
 
@@ -30,18 +33,18 @@ namespace SchoolSOA.Services.Identity.Controllers
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
-
+            
             var loginResult = await signInManager.PasswordSignInAsync(model.UserName, model.Password, false, false);
             if (!loginResult.Succeeded)
-                return BadRequest("Invalid username or password");
+                return BadRequest(new { errors = "Invalid Username or Password" });
 
             var userId = dbContext.Users.First(it => it.UserName == model.UserName).Id;
 
-            return Json(new { token = GetToken(userId) });
+            return Json(new UserViewModel { UserName = model.UserName, Token = GetToken(userId) });
         }
 
         [HttpPost]
-        public async Task<IActionResult> Register([FromBody] RegisterViewModel model)
+        public async Task<IActionResult> Register([FromBody] RegisterViewModel model, [FromServices] AuthDbContext dbContext)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
@@ -52,11 +55,25 @@ namespace SchoolSOA.Services.Identity.Controllers
             }, model.Password);
 
             if (!identityResult.Succeeded)
-                return BadRequest(string.Join(Environment.NewLine, identityResult.Errors.Select(it => it.Description)));
+                return BadRequest(new { errors = string.Join(Environment.NewLine, identityResult.Errors.Select(it => it.Description)) });
 
-            return Json(new { token = GetToken(model.UserName) });
+            var userId = await dbContext.Users.Where(it => it.UserName == model.UserName).Select(it => it.Id).FirstAsync();
+
+            return Json(new UserViewModel { UserName = model.UserName, Token = GetToken(userId) });
         }
 
+        [HttpGet]
+        [Authorize]
+        public async Task<IActionResult> Profile([FromServices] AuthDbContext dbContext)
+        {
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            var user = await dbContext.Users.FindAsync(userId);
+            if (user == null)
+                return Unauthorized();
+            
+            return Json(new UserViewModel { UserName = user.UserName, Token = GetToken(user.Id) });
+        }
+        
         private string GetToken(string userId)
         {
             var now = DateTime.UtcNow;

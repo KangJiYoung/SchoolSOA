@@ -1,17 +1,25 @@
-import { Component } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 
 import { AuthenticationPage } from '../authentication/authentication';
 import { BlogPage } from '../blog/blog';
+import {AuthorizationService} from "../../services/authorization.service";
 
 @Component({
   templateUrl: 'tabs.html'
 })
-export class TabsPage {
+export class TabsPage implements OnInit {
 
   tab1Root = BlogPage;
   tab2Root = AuthenticationPage;
 
-  constructor() {
+  isAuth: boolean;
 
+  constructor(private authorizationService: AuthorizationService) {
+  }
+
+  ngOnInit(): void {
+    this.authorizationService
+      .isAuthenticated
+      .subscribe(isAuth => this.isAuth = isAuth);
   }
 }

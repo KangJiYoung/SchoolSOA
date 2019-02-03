@@ -17,7 +17,7 @@ export class PostService extends BaseService {
         params = params.set('blogId', blogId);
 
         return this.http
-            .get<Post[]>('http://localhost:5000/' + 'blogPosts', {
+            .get<Post[]>(this.baseUrl + 'blogPosts', {
                 params
             })
             .pipe(map((response: any) => response.posts));

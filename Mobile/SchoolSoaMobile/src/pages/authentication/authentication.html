@@ -10,33 +10,44 @@
 
   <div *ngIf="isLogin">
     <h3>Login</h3>
-    <ion-list>
-      <ion-item>
-        <ion-label fixed>Username</ion-label>
-        <ion-input type="text"></ion-input>
-      </ion-item>
-      <ion-item>
-        <ion-label fixed>Password</ion-label>
-        <ion-input type="password"></ion-input>
-      </ion-item>
-    </ion-list>
-    <div padding>
-      <button ion-button block>Login</button>
-    </div>
+    <form #loginForm="ngForm" (ngSubmit)="login()">
+      <ion-list>
+        <ion-item>
+          <ion-label fixed>Username</ion-label>
+          <ion-input type="text" [(ngModel)]="loginModel.username" name="username" required></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-label fixed>Password</ion-label>
+          <ion-input type="password" [(ngModel)]="loginModel.password" name="password" required></ion-input>
+        </ion-item>
+      </ion-list>
+      <p padding *ngIf="loginErrors" color="danger">{{ loginErrors }}</p>
+      <div padding>
+        <button ion-button block type="submit" [disabled]="!loginForm.valid">Login</button>
+      </div>
+    </form>
     <p>If you do not have an account register <a (click)="isLogin = false;">here</a>!</p>
   </div>
 
-  <ion-list *ngIf="!isLogin">
+  <div *ngIf="!isLogin">
     <h3>Register</h3>
-    <ion-item>
-      <ion-label fixed>Username</ion-label>
-      <ion-input type="text"></ion-input>
-    </ion-item>
-    <ion-item>
-      <ion-label fixed>Password</ion-label>
-      <ion-input type="password"></ion-input>
-    </ion-item>
-    <button ion-button>Login</button>
-  </ion-list>
+    <form #registerForm="ngForm" (ngSubmit)="register()">
+      <ion-list>
+        <ion-item>
+          <ion-label fixed>Username</ion-label>
+          <ion-input type="text" [(ngModel)]="registerModel.username" name="username" required></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-label fixed>Password</ion-label>
+          <ion-input type="password" [(ngModel)]="registerModel.password" name="password" required></ion-input>
+        </ion-item>
+      </ion-list>
+      <p padding *ngIf="registerErrors" color="danger">{{ registerErrors }}</p>
+      <div padding>
+        <button ion-button block type="submit" [disabled]="!registerForm.valid">Register</button>
+      </div>
+    </form>
+    <p>If you already have an account login <a (click)="isLogin = true;">here</a>!</p>
+  </div>
 
 </ion-content>

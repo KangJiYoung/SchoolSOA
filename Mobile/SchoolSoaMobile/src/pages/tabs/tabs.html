@@ -1,4 +1,8 @@
-<ion-tabs>
+<ion-tabs *ngIf="isAuth">
+  <ion-tab [root]="tab1Root" tabTitle="Blog" tabIcon="home"></ion-tab>
+  <!--<ion-tab [root]="tab2Root" tabTitle="Authentication" tabIcon="logo-freebsd-devil"></ion-tab>-->
+</ion-tabs>
+<ion-tabs *ngIf="!isAuth">
   <ion-tab [root]="tab1Root" tabTitle="Blog" tabIcon="home"></ion-tab>
   <ion-tab [root]="tab2Root" tabTitle="Authentication" tabIcon="logo-freebsd-devil"></ion-tab>
 </ion-tabs>

@@ -48,6 +48,18 @@
             ],
             "UpstreamPathTemplate": "/register",
             "UpstreamHttpMethod": [ "Post" ]
+        },
+        {
+            "DownstreamPathTemplate": "/Home/Profile",
+            "DownstreamScheme": "http",
+            "DownstreamHostAndPorts": [
+                {
+                    "Host": "identity",
+                    "Port": 80
+                }
+            ],
+            "UpstreamPathTemplate": "/me",
+            "UpstreamHttpMethod": [ "Get" ]
         }
     ]
 }

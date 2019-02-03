@@ -18,7 +18,7 @@ export class BlogService extends BaseService {
         params = params.set('take', take.toString());
 
         return this.http
-            .get<Blog[]>('http://localhost:5000/' + 'blogs', {
+            .get<Blog[]>(this.baseUrl + 'blogs', {
                 params
             })
             .pipe(map((response: any) => response.blogs));
