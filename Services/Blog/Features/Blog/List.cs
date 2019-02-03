@@ -25,24 +25,21 @@ namespace SchoolSOA.Services.Blog.Features
         public class QueryHandler : IRequestHandler<Query, BlogsEnvelope>
         {
             private readonly BlogDbContext dbContext;
-            private readonly ILogger<QueryHandler> logger;
 
-            public QueryHandler(BlogDbContext dbContext, ILogger<QueryHandler> logger)
+            public QueryHandler(BlogDbContext dbContext)
             {
                 this.dbContext = dbContext;
-                this.logger = logger;
             }
 
             public async Task<BlogsEnvelope> Handle(Query request, CancellationToken cancellationToken)
             {
                 var blogs = await dbContext
                     .Blogs
+                    .OrderByDescending(it => it.Created)
                     .Skip(request.Skip)
                     .Take(request.Take)
                     .AsNoTracking()
                     .ToListAsync(cancellationToken);
-
-                logger.LogCritical((await dbContext.Blogs.CountAsync()).ToString());
 
                 return new BlogsEnvelope(blogs);
             }

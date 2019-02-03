@@ -4,7 +4,7 @@ services:
   gateway:
     image: microsoft/dotnet:2.1-sdk
     ports:
-      - "5000:80"
+      - "5010:80"
     volumes:
       - ./Gateway:/app
     working_dir: /app

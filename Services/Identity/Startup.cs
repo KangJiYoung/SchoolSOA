@@ -30,7 +30,7 @@ namespace SchoolSOA.Services.Identity
             var sqlServerConnectionOptions = serviceProvider.GetRequiredService<IOptions<SqlServerConnectionOptions>>().Value;
 
             services.AddDbContextPool<AuthDbContext>(it => it.UseSqlServer(sqlServerConnectionOptions.ConnectionString));
-            services.AddIdentity<IdentityUser, IdentityRole>()
+            services.AddIdentity<AuthUser, IdentityRole>()
                 .AddEntityFrameworkStores<AuthDbContext>()
                 .AddDefaultTokenProviders();
             

@@ -1,0 +1,24 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>Add Blog</ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding>
+  <form #addBlogForm="ngForm" (ngSubmit)="addBlog()">
+    <ion-item>
+      <ion-label color="primary" stacked>Title</ion-label>
+      <ion-input type="text" placeholder="Title" [(ngModel)]="model.title" name="title" required></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label color="primary" stacked>Content</ion-label>
+      <ion-textarea placeholder="Content" rows="20" [(ngModel)]="model.content" name="content" required></ion-textarea>
+    </ion-item>
+
+    <div padding>
+      <button ion-button block type="submit" [disabled]="!addBlogForm.valid">Add</button>
+    </div>
+  </form>
+
+</ion-content>

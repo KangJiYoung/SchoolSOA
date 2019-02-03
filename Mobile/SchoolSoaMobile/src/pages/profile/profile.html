@@ -1,0 +1,27 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>Profile</ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding>
+
+  <h1>Profile</h1>
+
+  <form #profileForm="ngForm" (ngSubmit)="changeProfile()">
+    <ion-list inset>
+      <ion-item>
+        <ion-label>Full Name</ion-label>
+        <ion-input type="text" [(ngModel)]="user.fullname" name="fullname" required></ion-input>
+      </ion-item>
+    </ion-list>
+
+    <div padding>
+      <button ion-button block type="submit" [disabled]="!profileForm.valid">Save</button>
+    </div>
+  </form>
+
+  <h1>Badges</h1>
+  <p>You have no badges yet, posts blogs and comments to receive one.</p>
+
+</ion-content>

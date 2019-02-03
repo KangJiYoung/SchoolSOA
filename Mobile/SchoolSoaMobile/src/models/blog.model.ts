@@ -5,3 +5,8 @@ export class Blog {
     title: string;
     content: string;
 }
+
+export class InsertBlog {
+  title: string;
+  content: string;
+}

@@ -14,6 +14,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
+using Newtonsoft.Json;
 using SchoolSOA.Common.Options;
 using SchoolSOA.Services.Blog.Entities;
 
@@ -36,7 +37,7 @@ namespace Blog
 
             services.AddDbContextPool<BlogDbContext>(it => it.UseSqlServer(sqlServerConnectionOptions.ConnectionString));
 
-            services.AddMediatR();
+            services.AddMediatR(); 
 
             services.AddAuthentication(x =>
             {
@@ -61,7 +62,8 @@ namespace Blog
                 };
             });
 
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+            services.AddMvc()
+                .SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)

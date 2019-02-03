@@ -1,6 +1,11 @@
+using System;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 
 namespace SchoolSOA.Services.Blog.Features
 {
@@ -19,6 +24,15 @@ namespace SchoolSOA.Services.Blog.Features
             [FromQuery] int take)
         {
             return await mediator.Send(new List.Query(skip, take));
+        }
+
+        [HttpPost]
+        [Authorize]
+        public async Task Insert([FromBody] Insert.InsertBlogViewModel model)
+        {
+            var userId = new Guid(User.FindFirstValue(ClaimTypes.NameIdentifier));
+            
+            await mediator.Send(new Insert.Query(model.Title, model.Content, userId));
         }
     }
 }

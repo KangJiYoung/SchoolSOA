@@ -7,7 +7,7 @@
 <ion-content padding>
   <h1>{{ blog.title }}</h1>
   <br>
-  <textarea>{{ blog.content }}</textarea>
+  <ion-textarea [value]="blog.content" readonly></ion-textarea>
 
   <h3>Comments</h3>
   <ion-card *ngFor="let post of posts">
@@ -16,5 +16,7 @@
     </ion-card-content>
   </ion-card>
 
-  <button ion-fab>Button</button>
+  <div padding>
+    <button ion-button block type="button" (click)="addComment()">Add Comment</button>
+  </div>
 </ion-content>

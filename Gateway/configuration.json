@@ -24,6 +24,30 @@
             "UpstreamPathTemplate": "/blogPosts?blogId={blogId}",
             "UpstreamHttpMethod": [ "Get" ]
         },
+        {
+            "DownstreamPathTemplate": "/Blog/Insert",
+            "DownstreamScheme": "http",
+            "DownstreamHostAndPorts": [
+                {
+                    "Host": "blog",
+                    "Port": 80
+                }
+            ],
+            "UpstreamPathTemplate": "/addBlog",
+            "UpstreamHttpMethod": [ "Post" ]
+        },
+        {
+            "DownstreamPathTemplate": "/Post/Insert",
+            "DownstreamScheme": "http",
+            "DownstreamHostAndPorts": [
+                {
+                    "Host": "blog",
+                    "Port": 80
+                }
+            ],
+            "UpstreamPathTemplate": "/addPost",
+            "UpstreamHttpMethod": [ "Post" ]
+        },
         
         {
             "DownstreamPathTemplate": "/Home/Login",
@@ -60,6 +84,18 @@
             ],
             "UpstreamPathTemplate": "/me",
             "UpstreamHttpMethod": [ "Get" ]
+        },
+        {
+            "DownstreamPathTemplate": "/Home/UpdateFullName",
+            "DownstreamScheme": "http",
+            "DownstreamHostAndPorts": [
+                {
+                    "Host": "identity",
+                    "Port": 80
+                }
+            ],
+            "UpstreamPathTemplate": "/me/updateFullName",
+            "UpstreamHttpMethod": [ "Put" ]
         }
     ]
 }

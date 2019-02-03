@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { BaseService } from './base.service';
 import { Observable } from 'rxjs/Observable';
-import { Blog } from '../models/blog.model';
+import {Blog, InsertBlog} from '../models/blog.model';
 import { map } from 'rxjs/operators';
 
 @Injectable()
@@ -22,5 +22,10 @@ export class BlogService extends BaseService {
                 params
             })
             .pipe(map((response: any) => response.blogs));
+    }
+
+    insert(model: InsertBlog): Observable<object> {
+      return this.http
+        .post<Object>(this.baseUrl + 'addBlog', model);
     }
 }

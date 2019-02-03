@@ -14,6 +14,8 @@ import {SplashScreen} from '@ionic-native/splash-screen';
 import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
 import {TokenInterceptor} from "../interceptors/authorization.interceptor";
 import {AuthorizationService} from "../services/authorization.service";
+import {ProfilePage} from "../pages/profile/profile";
+import {BlogAddPage} from "../pages/blog/add/add";
 
 @NgModule({
   declarations: [
@@ -21,7 +23,9 @@ import {AuthorizationService} from "../services/authorization.service";
     AuthenticationPage,
     BlogPage,
     TabsPage,
-    DetailsPage
+    DetailsPage,
+    ProfilePage,
+    BlogAddPage
   ],
   imports: [
     BrowserModule,
@@ -34,7 +38,9 @@ import {AuthorizationService} from "../services/authorization.service";
     AuthenticationPage,
     BlogPage,
     TabsPage,
-    DetailsPage
+    DetailsPage,
+    ProfilePage,
+    BlogAddPage
   ],
   providers: [
     StatusBar,

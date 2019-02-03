@@ -5,3 +5,8 @@ export class Post {
 
     content: string;
 }
+
+export class InsertPost {
+  blogId: string;
+  content: string;
+}

@@ -1,7 +1,9 @@
 using System;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using SchoolSOA.Services.Post.Features;
 
 namespace SchoolSOA.Services.Blog.Post
 {
@@ -19,6 +21,14 @@ namespace SchoolSOA.Services.Blog.Post
             [FromQuery] Guid blogId)
         {
             return await mediator.Send(new List.Query(blogId));
+        }
+
+        [HttpPost]
+        public Task<Entities.Post> Insert([FromBody] Insert.InsertPostViewModel model)
+        {
+            var userId = new Guid(User.FindFirstValue(ClaimTypes.NameIdentifier));
+            
+            return mediator.Send(new Insert.Query(model.BlogId, userId, model.Content));
         }
     }
 }

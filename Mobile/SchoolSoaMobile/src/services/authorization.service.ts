@@ -4,7 +4,7 @@ import {BaseService} from './base.service';
 import {Observable} from 'rxjs/Observable';
 import {RegisterModel} from "../models/register.model";
 import {BehaviorSubject, ReplaySubject} from "rxjs";
-import {User} from "../models/user.model";
+import {UpdateUserFullNameModel, User} from "../models/user.model";
 import {distinctUntilChanged, map} from "rxjs/operators";
 import {LoginModel} from "../models/login.model";
 
@@ -61,5 +61,15 @@ export class AuthorizationService extends BaseService {
 
     this.currentUserSubject.next({} as User);
     this.isAuthenticatedSubject.next(false);
+  }
+
+  updateFullName(model: UpdateUserFullNameModel): Observable<User> {
+    return this.http
+      .put<User>(this.baseUrl + 'me/updateFullName', model)
+      .pipe(map(user => {
+        this.setAuth(user);
+
+        return user;
+      }));
   }
 }
