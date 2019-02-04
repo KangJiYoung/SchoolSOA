@@ -12,12 +12,14 @@ namespace SchoolSOA.Services.Blog.Features
         {
             public string Title { get; }
             public string Content { get; }
+            public string CreatorName { get; }
             public Guid CreatorId { get; }
             
-            public Query(string title, string content, Guid creatorId)
+            public Query(string title, string content, string creatorName, Guid creatorId)
             {
                 Title = title;
                 Content = content;
+                CreatorName = creatorName;
                 CreatorId = creatorId;
             }
         }
@@ -44,6 +46,7 @@ namespace SchoolSOA.Services.Blog.Features
                     Content = request.Content,
                     Title = request.Title,
                     CreatorId = request.CreatorId,
+                    CreatorName = request.CreatorName,
                     Created = DateTime.Now
                 };
 

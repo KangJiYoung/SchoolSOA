@@ -1,7 +1,7 @@
 import {Component} from '@angular/core';
 import {AuthorizationService} from "../../services/authorization.service";
 import {RegisterModel} from "../../models/register.model";
-import {AlertController, NavController} from "ionic-angular";
+import {AlertController} from "ionic-angular";
 import {LoginModel} from "../../models/login.model";
 
 @Component({
@@ -17,8 +17,7 @@ export class AuthenticationPage {
 
   isLogin: boolean = true;
 
-  constructor(private authorizationService: AuthorizationService, private alertCtrl: AlertController,
-              private navCtrl: NavController) {
+  constructor(private authorizationService: AuthorizationService, private alertCtrl: AlertController) {
   }
 
   register() {

@@ -23,6 +23,7 @@ services:
     command: [ 'dotnet', 'watch', 'run' ]
     depends_on:
       - blog-db
+      - rabbitmq
   blog-db:
     image: "microsoft/mssql-server-linux:2017-CU8"
     environment:
@@ -39,8 +40,15 @@ services:
     command: [ 'dotnet', 'watch', 'run' ]
     depends_on:
       - identity-db
+      - rabbitmq
   identity-db:
     image: "microsoft/mssql-server-linux:2017-CU8"
     environment:
         SA_PASSWORD: "Password1;"
         ACCEPT_EULA: "Y"
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    ports:
+      - "15672:15672"
+    container_name: rabbitmq

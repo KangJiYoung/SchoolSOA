@@ -30,9 +30,10 @@ namespace SchoolSOA.Services.Blog.Features
         [Authorize]
         public async Task Insert([FromBody] Insert.InsertBlogViewModel model)
         {
+            var userFullName = User.FindFirstValue(ClaimTypes.Name);
             var userId = new Guid(User.FindFirstValue(ClaimTypes.NameIdentifier));
             
-            await mediator.Send(new Insert.Query(model.Title, model.Content, userId));
+            await mediator.Send(new Insert.Query(model.Title, model.Content, userFullName, userId));
         }
     }
 }

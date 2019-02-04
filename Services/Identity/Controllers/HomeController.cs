@@ -4,6 +4,8 @@ using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
+using Common.Events;
+using MassTransit;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -19,17 +21,24 @@ namespace SchoolSOA.Services.Identity.Controllers
     {
         private readonly UserManager<AuthUser> userManager;
         private readonly SignInManager<AuthUser> signInManager;
+        private readonly AuthDbContext dbContext;
+        private readonly IBus bus;
 
-        public HomeController(UserManager<AuthUser> userManager, SignInManager<AuthUser> signInManager)
+        public HomeController(
+            UserManager<AuthUser> userManager, 
+            SignInManager<AuthUser> signInManager,
+            AuthDbContext dbContext,
+            IBus bus)
         {
             this.userManager = userManager;
             this.signInManager = signInManager;
+            this.dbContext = dbContext;
+            this.bus = bus;
         }
 
         [HttpPost]
         public async Task<IActionResult> Login(
-            [FromBody] LoginViewModel model,
-            [FromServices] AuthDbContext dbContext)
+            [FromBody] LoginViewModel model)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
@@ -38,14 +47,13 @@ namespace SchoolSOA.Services.Identity.Controllers
             if (!loginResult.Succeeded)
                 return BadRequest(new {errors = "Invalid Username or Password"});
 
-            var userId = dbContext.Users.First(it => it.UserName == model.UserName).Id;
+            var user = await dbContext.Users.FirstAsync(it => it.UserName == model.UserName);
 
-            return Json(new UserViewModel {Username = model.UserName, Token = GetToken(userId)});
+            return Json(new UserViewModel {Username = model.UserName, Token = GetToken(user.Id, user.FullName)});
         }
 
         [HttpPost]
-        public async Task<IActionResult> Register([FromBody] RegisterViewModel model,
-            [FromServices] AuthDbContext dbContext)
+        public async Task<IActionResult> Register([FromBody] RegisterViewModel model)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
@@ -66,12 +74,13 @@ namespace SchoolSOA.Services.Identity.Controllers
                 .Select(it => it.Id)
                 .FirstAsync();
 
-            return Json(new UserViewModel {Username = model.UserName, Fullname = model.UserName, Token = GetToken(userId)});
+            return Json(new UserViewModel
+                {Username = model.UserName, Fullname = model.UserName, Token = GetToken(userId, model.UserName)});
         }
 
         [HttpGet]
         [Authorize]
-        public async Task<IActionResult> Profile([FromServices] AuthDbContext dbContext)
+        public async Task<IActionResult> Profile()
         {
             var userId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
             var user = await dbContext.Users.FindAsync(userId);
@@ -79,12 +88,12 @@ namespace SchoolSOA.Services.Identity.Controllers
                 return Unauthorized();
 
             return Json(new UserViewModel
-                {Username = user.UserName, Fullname = user.FullName, Token = GetToken(user.Id)});
+                {Username = user.UserName, Fullname = user.FullName, Token = GetToken(user.Id, user.FullName)});
         }
 
         [HttpPut]
         [Authorize]
-        public async Task<IActionResult> UpdateFullName([FromServices] AuthDbContext dbContext, [FromBody] UpdateFullNameViewModel model)
+        public async Task<IActionResult> UpdateFullName([FromBody] UpdateFullNameViewModel model)
         {
             var userId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
             var user = await dbContext.Users.FindAsync(userId);
@@ -98,16 +107,19 @@ namespace SchoolSOA.Services.Identity.Controllers
             dbContext.Update(user);
             await dbContext.SaveChangesAsync();
 
+            await bus.Publish(new UserChangedFullNameEvent(new Guid(user.Id), user.FullName));
+
             return Json(new UserViewModel
-                {Username = user.UserName, Fullname = user.FullName, Token = GetToken(user.Id)});
+                {Username = user.UserName, Fullname = user.FullName, Token = GetToken(user.Id, user.FullName)});
         }
 
-        private static string GetToken(string userId)
+        private static string GetToken(string userId, string fullName)
         {
             var now = DateTime.UtcNow;
 
             var claims = new[]
             {
+                new Claim(ClaimTypes.Name, fullName),
                 new Claim(ClaimTypes.NameIdentifier, userId),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
                 new Claim(JwtRegisteredClaimNames.Iat, now.ToUniversalTime().ToString(), ClaimValueTypes.Integer64)

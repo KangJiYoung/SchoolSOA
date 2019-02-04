@@ -18,9 +18,9 @@ namespace SchoolSOA.Services.Blog.Entities
             var firstBlogId = Guid.NewGuid();
 
             modelBuilder.Entity<Blog>().HasData(
-                new Blog { Id = firstBlogId, CreatorId = Guid.NewGuid(), Title = "Title-1", Content = "Content-1" },
-                new Blog { Id = Guid.NewGuid(), CreatorId = Guid.NewGuid(), Title = "Title-2", Content = "Content-2" },
-                new Blog { Id = Guid.NewGuid(), CreatorId = Guid.NewGuid(), Title = "Title-3", Content = "Content-3" });
+                new Blog { Id = firstBlogId, CreatorId = Guid.NewGuid(), CreatorName = "Creator 1", Title = "Title-1", Content = "Content-1" },
+                new Blog { Id = Guid.NewGuid(), CreatorId = Guid.NewGuid(), CreatorName = "Creator 2", Title = "Title-2", Content = "Content-2" },
+                new Blog { Id = Guid.NewGuid(), CreatorId = Guid.NewGuid(), CreatorName = "Creator 3", Title = "Title-3", Content = "Content-3" });
 
             modelBuilder.Entity<Post>().HasData(
                 new Post { Id = Guid.NewGuid(), CreatorId = Guid.NewGuid(), BlogId = firstBlogId, Content = "Content" });

@@ -11,5 +11,6 @@ namespace SchoolSOA.Services.Blog.Entities
         public Blog Blog { get; set; }
 
         public string Content { get; set; }
+        public string CreatorName { get; set; }
     }
 }

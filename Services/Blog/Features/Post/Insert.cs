@@ -11,12 +11,14 @@ namespace SchoolSOA.Services.Post.Features
         public class Query : IRequest<Blog.Entities.Post>
         {
             public Guid BlogId { get; }
+            public string CreatorName { get; }
             public string Content { get; }
             public Guid CreatorId { get; }
 
-            public Query(Guid blogId, Guid creatorId, string content)
+            public Query(Guid blogId, string creatorName, Guid creatorId, string content)
             {
                 BlogId = blogId;
+                CreatorName = creatorName;
                 CreatorId = creatorId;
                 Content = content;
             }
@@ -43,7 +45,8 @@ namespace SchoolSOA.Services.Post.Features
                 {
                     CreatorId = request.CreatorId,
                     Content = request.Content,
-                    BlogId = request.BlogId
+                    BlogId = request.BlogId,
+                    CreatorName = request.CreatorName
                 };
 
                 await dbContext.AddAsync(post, cancellationToken);
