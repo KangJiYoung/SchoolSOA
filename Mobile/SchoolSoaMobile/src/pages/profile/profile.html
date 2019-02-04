@@ -22,6 +22,20 @@
   </form>
 
   <h1>Badges</h1>
-  <p>You have no badges yet, posts blogs and comments to receive one.</p>
+  <ion-card *ngFor="let badge of badges">
+    <ion-card-header *ngIf="badge.type === 0">
+      Beginner
+      <ion-icon style="color: green" name="checkmark" *ngIf="badge.currentThreshold >= badge.awardThreshold"></ion-icon>
+      <ion-icon style="color: red" name="close" *ngIf="badge.currentThreshold < badge.awardThreshold"></ion-icon>
+    </ion-card-header>
+    <ion-card-content *ngIf="badge.type === 0">Post a blog to receive this badge!</ion-card-content>
+
+    <ion-card-header *ngIf="badge.type === 1">
+      Expert
+      <ion-icon style="color: green" name="checkmark" *ngIf="badge.currentThreshold >= badge.awardThreshold"></ion-icon>
+      <ion-icon style="color: red" name="close" *ngIf="badge.currentThreshold < badge.awardThreshold"></ion-icon>
+    </ion-card-header>
+    <ion-card-content *ngIf="badge.type === 1">Post 5 blogs to receive this badge!</ion-card-content>
+  </ion-card>
 
 </ion-content>

@@ -48,6 +48,19 @@
             "UpstreamPathTemplate": "/addPost",
             "UpstreamHttpMethod": [ "Post" ]
         },
+
+        {
+            "DownstreamPathTemplate": "/Badge/GetMyBadges",
+            "DownstreamScheme": "http",
+            "DownstreamHostAndPorts": [
+                {
+                    "Host": "badge",
+                    "Port": 80
+                }
+            ],
+            "UpstreamPathTemplate": "/me/badges",
+            "UpstreamHttpMethod": [ "Get" ]
+        },
         
         {
             "DownstreamPathTemplate": "/Home/Login",

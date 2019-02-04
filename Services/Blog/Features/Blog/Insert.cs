@@ -1,6 +1,8 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using Common.Events;
+using MassTransit;
 using MediatR;
 using SchoolSOA.Services.Blog.Entities;
 
@@ -33,10 +35,12 @@ namespace SchoolSOA.Services.Blog.Features
         public class QueryHandler : IRequestHandler<Query, Unit>
         {
             private readonly BlogDbContext dbContext;
+            private readonly IBus bus;
 
-            public QueryHandler(BlogDbContext dbContext)
+            public QueryHandler(BlogDbContext dbContext, IBus bus)
             {
                 this.dbContext = dbContext;
+                this.bus = bus;
             }
 
             public async Task<Unit> Handle(Query request, CancellationToken cancellationToken)
@@ -52,6 +56,8 @@ namespace SchoolSOA.Services.Blog.Features
 
                 await dbContext.AddAsync(blog, cancellationToken);
                 await dbContext.SaveChangesAsync(cancellationToken);
+
+                await bus.Publish(new UserPostedBlogEvent(request.CreatorId), cancellationToken);
                 
                 return Unit.Value;
             }

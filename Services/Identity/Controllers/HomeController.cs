@@ -74,6 +74,8 @@ namespace SchoolSOA.Services.Identity.Controllers
                 .Select(it => it.Id)
                 .FirstAsync();
 
+            await bus.Publish(new UserCreatedEvent(new Guid(userId)));
+
             return Json(new UserViewModel
                 {Username = model.UserName, Fullname = model.UserName, Token = GetToken(userId, model.UserName)});
         }
