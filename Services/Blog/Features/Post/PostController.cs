@@ -29,7 +29,7 @@ namespace SchoolSOA.Services.Blog.Post
             var userFullName = User.FindFirstValue(ClaimTypes.Name);
             var userId = new Guid(User.FindFirstValue(ClaimTypes.NameIdentifier));
             
-            return mediator.Send(new Insert.Query(model.BlogId, userFullName, userId, model.Content));
+            return mediator.Send(new Insert.Command(model.BlogId, userFullName, userId, model.Content));
         }
     }
 }

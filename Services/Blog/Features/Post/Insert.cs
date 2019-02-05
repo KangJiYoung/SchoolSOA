@@ -8,14 +8,14 @@ namespace SchoolSOA.Services.Post.Features
 {
     public class Insert
     {
-        public class Query : IRequest<Blog.Entities.Post>
+        public class Command : IRequest<Blog.Entities.Post>
         {
             public Guid BlogId { get; }
             public string CreatorName { get; }
             public string Content { get; }
             public Guid CreatorId { get; }
 
-            public Query(Guid blogId, string creatorName, Guid creatorId, string content)
+            public Command(Guid blogId, string creatorName, Guid creatorId, string content)
             {
                 BlogId = blogId;
                 CreatorName = creatorName;
@@ -30,7 +30,7 @@ namespace SchoolSOA.Services.Post.Features
             public string Content { get; set; }
         }
 
-        public class QueryHandler : IRequestHandler<Query, Blog.Entities.Post>
+        public class QueryHandler : IRequestHandler<Command, Blog.Entities.Post>
         {
             private readonly BlogDbContext dbContext;
 
@@ -39,7 +39,7 @@ namespace SchoolSOA.Services.Post.Features
                 this.dbContext = dbContext;
             }
 
-            public async Task<Blog.Entities.Post> Handle(Query request, CancellationToken cancellationToken)
+            public async Task<Blog.Entities.Post> Handle(Command request, CancellationToken cancellationToken)
             {
                 var post = new Blog.Entities.Post
                 {

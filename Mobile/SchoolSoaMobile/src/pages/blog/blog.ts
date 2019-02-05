@@ -12,6 +12,8 @@ import {BlogAddPage} from "./add/add";
   providers: [BlogService]
 })
 export class BlogPage implements OnInit {
+  private PAGE_SIZE = 3;
+
   blogs: Blog[];
   isAuth: boolean;
   blogIndex: number;
@@ -36,12 +38,12 @@ export class BlogPage implements OnInit {
 
   loadBlogs(event) {
     this.blogService
-      .getAllBlogs(this.blogIndex * 20 + this.blogIndex++, 20)
+      .getAllBlogs(this.blogIndex++ * this.PAGE_SIZE, this.PAGE_SIZE)
       .subscribe(blogs => {
         this.blogs = this.blogs.concat(blogs);
 
         if (event) {
-          if (blogs.length < 20) {
+          if (blogs.length < this.PAGE_SIZE) {
             event.enable(false);
           }
           event.complete();

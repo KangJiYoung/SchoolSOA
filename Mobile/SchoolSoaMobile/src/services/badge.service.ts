@@ -2,7 +2,6 @@ import {Injectable} from "@angular/core";
 import {BaseService} from "./base.service";
 import {HttpClient} from "@angular/common/http";
 import {Observable} from "rxjs/Observable";
-import {InsertPost, Post} from "../models/post.model";
 import {Badge} from "ionic-angular";
 import {map} from "rxjs/operators";
 

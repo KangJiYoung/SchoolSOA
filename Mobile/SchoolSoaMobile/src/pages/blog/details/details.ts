@@ -1,8 +1,9 @@
-import { Component, OnInit, Input } from '@angular/core';
-import { PostService } from '../../../services/post.service';
-import { Post } from '../../../models/post.model';
-import { Blog } from '../../../models/blog.model';
+import {Component, OnInit, Input} from '@angular/core';
+import {PostService} from '../../../services/post.service';
+import {Post} from '../../../models/post.model';
+import {Blog} from '../../../models/blog.model';
 import {AlertController, NavParams} from 'ionic-angular';
+import {AuthorizationService} from "../../../services/authorization.service";
 
 @Component({
   selector: 'page-details',
@@ -13,18 +14,23 @@ export class DetailsPage implements OnInit {
   @Input() blog: Blog;
 
   posts: Post[] = [];
+  isAuth: boolean;
 
   constructor(
     private navParams: NavParams,
     private postService: PostService,
-    private alertCtrl: AlertController) {
-      this.blog = this.navParams.get('blog');
+    private alertCtrl: AlertController,
+    private authorizationService: AuthorizationService) {
+    this.blog = this.navParams.get('blog');
   }
 
   ngOnInit() {
     this.postService
       .getAllPosts(this.blog.id)
       .subscribe(posts => this.posts = posts);
+    this.authorizationService
+      .isAuthenticated
+      .subscribe(isAuth => this.isAuth = isAuth);
   }
 
   addComment() {
@@ -53,7 +59,7 @@ export class DetailsPage implements OnInit {
               }
 
               this.postService
-                .addPost({ blogId: this.blog.id, content })
+                .addPost({blogId: this.blog.id, content})
                 .subscribe(post => this.posts.push(post));
             }
           }

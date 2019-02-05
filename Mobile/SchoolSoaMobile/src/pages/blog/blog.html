@@ -4,17 +4,15 @@
   </ion-navbar>
 </ion-header>
 
-<ion-content padding>
-  <ion-card *ngFor="let blog of blogs" (click)="onBlogClick(blog)">
-    <ion-card-header>
-      {{ blog.title }}
-    </ion-card-header>
-    <ion-card-content>
-      {{ blog.content }}
-    </ion-card-content>
+<ion-content padding class="card-background-page">
+  <ion-card *ngFor="let blog of blogs; let i = index" (click)="onBlogClick(blog)">
+    <img width="256" height="256" [src]="'assets/imgs/blogBck/' + ((i % 6) + 1) +'.jpg'"/>
+    <div class="card-title">{{ blog.title }}</div>
+    <div class="card-subtitle">Read more....</div>
+    <div class="card-author">By: {{ blog.creatorName }}</div>
   </ion-card>
 
-  <ion-infinite-scroll threshold="100px" (ionInfinite)="ionViewDidEnter($event)">
+  <ion-infinite-scroll threshold="100px" (ionInfinite)="loadBlogs($event)">
     <ion-infinite-scroll-content
       loadingSpinner="bubbles"
       loadingText="Loading more blogs...">

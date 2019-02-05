@@ -21,7 +21,7 @@
     </div>
   </form>
 
-  <h1>Badges</h1>
+  <h1>Badges<ion-icon name="medal"></ion-icon></h1>
   <ion-card *ngFor="let badge of badges">
     <ion-card-header *ngIf="badge.type === 0">
       Beginner
@@ -36,6 +36,7 @@
       <ion-icon style="color: red" name="close" *ngIf="badge.currentThreshold < badge.awardThreshold"></ion-icon>
     </ion-card-header>
     <ion-card-content *ngIf="badge.type === 1">Post 5 blogs to receive this badge!</ion-card-content>
+    <small>Remaining: {{ badge.awardThreshold - badge.currentThreshold < 0 ? 0 : badge.awardThreshold - badge.currentThreshold }}</small>
   </ion-card>
 
 </ion-content>

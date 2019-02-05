@@ -5,18 +5,25 @@
 </ion-header>
 
 <ion-content padding>
-  <h1>{{ blog.title }}</h1>
+  <h1 text-center>{{ blog.title }}</h1>
   <br>
   <ion-textarea [value]="blog.content" readonly></ion-textarea>
 
   <h3>Comments</h3>
-  <ion-card *ngFor="let post of posts">
-    <ion-card-content>
-      {{ post.content }}
-    </ion-card-content>
-  </ion-card>
+  <p *ngIf="posts.length === 0">No comments yet, feel free to add a comment</p>
+  <ion-list>
+    <ion-card *ngFor="let post of posts">
+      <ion-card-header>
+        <ion-icon name="person"></ion-icon>
+        {{ post.creatorName }}
+      </ion-card-header>
+      <ion-card-content>
+        {{ post.content }}
+      </ion-card-content>
+    </ion-card>
+  </ion-list>
 
-  <div padding>
+  <div padding *ngIf="isAuth">
     <button ion-button block type="button" (click)="addComment()">Add Comment</button>
   </div>
 </ion-content>
